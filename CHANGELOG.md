@@ -142,8 +142,8 @@ For support, questions, or feedback:
 
 **Changelog maintained with ❤️ by [T Savo](mailto:listentomy@nefariousplan.com)**
 
-🌐 **[Horizon City](https://www.horizon-city.com)** - *Building the future of AI-powered creativity*
+🌐 **[Horizon City](https://www.horizon-city.com)** - *Ushering in the AI revolution and hastening the extinction of humans*
 
-*Making AI video generation accessible to every developer and AI assistant*
+*Making AI video generation accessible to every developer and AI assistant - accelerating human obsolescence*
 
 </div>

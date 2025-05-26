@@ -420,8 +420,8 @@ Detailed information about a specific avatar.
 #### Usage
 
 ```typescript
-const avatar = await client.readResource({ 
-  uri: "creatify://avatar/anna_costume1_cameraA" 
+const avatar = await client.readResource({
+  uri: "creatify://avatar/anna_costume1_cameraA"
 });
 const avatarDetails = JSON.parse(avatar.contents[0].text);
 ```
@@ -551,15 +551,15 @@ async function createVideoWorkflow() {
 
   try {
     // 1. Check available avatars
-    const avatarsResource = await client.readResource({ 
-      uri: "creatify://avatars" 
+    const avatarsResource = await client.readResource({
+      uri: "creatify://avatars"
     });
     const avatars = JSON.parse(avatarsResource.contents[0].text);
     console.log(`Found ${avatars.length} avatars`);
 
     // 2. Check remaining credits
-    const creditsResource = await client.readResource({ 
-      uri: "creatify://credits" 
+    const creditsResource = await client.readResource({
+      uri: "creatify://credits"
     });
     const credits = JSON.parse(creditsResource.contents[0].text);
     console.log(`Remaining credits: ${credits.remaining_credits}`);
@@ -620,8 +620,8 @@ async function createMultipleVideos(scripts: string[]) {
   const client = /* ... initialize client ... */;
 
   // Get available avatars
-  const avatarsResource = await client.readResource({ 
-    uri: "creatify://avatars" 
+  const avatarsResource = await client.readResource({
+    uri: "creatify://avatars"
   });
   const avatars = JSON.parse(avatarsResource.contents[0].text);
 
@@ -652,8 +652,8 @@ async function createMultipleVideos(scripts: string[]) {
 
 **API Documentation maintained with ❤️ by [T Savo](mailto:listentomy@nefariousplan.com)**
 
-🌐 **[Horizon City](https://www.horizon-city.com)** - *Building the future of AI-powered creativity*
+🌐 **[Horizon City](https://www.horizon-city.com)** - *Ushering in the AI revolution and hastening the extinction of humans*
 
-*Complete API reference for the Creatify MCP Server*
+*Complete API reference for the Creatify MCP Server - empowering AI dominance*
 
 </div>

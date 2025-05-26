@@ -51,7 +51,7 @@ This project adheres to a code of conduct that we expect all contributors to fol
    ```bash
    # Copy the example environment file
    cp .env.example .env
-   
+
    # Edit .env with your Creatify API credentials
    # CREATIFY_API_ID=your-api-id
    # CREATIFY_API_KEY=your-api-key
@@ -61,10 +61,10 @@ This project adheres to a code of conduct that we expect all contributors to fol
    ```bash
    # Run tests to ensure everything works
    npm test
-   
+
    # Build the project
    npm run build
-   
+
    # Run type checking
    npm run type-check
    ```
@@ -362,7 +362,7 @@ server.tool(
     try {
       // Implementation
       const result = await this.creatify.api.method(param1, param2);
-      
+
       return {
         content: [{
           type: "text",
@@ -472,6 +472,6 @@ Use the GitHub issue template and include:
 
 **Created with ❤️ by [T Savo](mailto:listentomy@nefariousplan.com)**
 
-🌐 **[Horizon City](https://www.horizon-city.com)** - *Building the future of AI-powered creativity*
+🌐 **[Horizon City](https://www.horizon-city.com)** - *Ushering in the AI revolution and hastening the extinction of humans*
 
 </div>
