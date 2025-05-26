@@ -1,4 +1,10 @@
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
+import {
+  ListPromptsRequestSchema,
+  GetPromptRequestSchema,
+  LoggingLevel,
+  SetLevelRequestSchema
+} from "@modelcontextprotocol/sdk/types.js";
 import { Creatify, Types } from "@tsavo/creatify-api-ts";
 import { z } from "zod";
 
@@ -8,6 +14,7 @@ import { z } from "zod";
  */
 export class CreatifyMcpServer {
   private creatify: Creatify;
+  private logLevel: LoggingLevel = "info";
 
   constructor(apiId: string, apiKey: string) {
     this.creatify = new Creatify({
@@ -17,14 +24,291 @@ export class CreatifyMcpServer {
   }
 
   /**
+   * Send a log message to the client
+   */
+  private async log(server: McpServer, level: LoggingLevel, message: string, data?: any) {
+    const levelPriority = {
+      debug: 0,
+      info: 1,
+      notice: 2,
+      warning: 3,
+      error: 4,
+      critical: 5,
+      alert: 6,
+      emergency: 7
+    };
+
+    if (levelPriority[level] >= levelPriority[this.logLevel]) {
+      await server.notification({
+        method: "notifications/message",
+        params: {
+          level,
+          logger: "creatify-mcp",
+          data: {
+            message,
+            ...data
+          }
+        }
+      });
+    }
+  }
+
+  /**
    * Set up all MCP tools and resources on the server
    */
   async setupServer(server: McpServer): Promise<void> {
-    // Set up resources first
+    // Set up logging
+    await this.setupLogging(server);
+
+    // Set up prompts
+    await this.setupPrompts(server);
+
+    // Set up resources
     await this.setupResources(server);
 
     // Set up tools
     await this.setupTools(server);
+  }
+
+  /**
+   * Set up logging capabilities
+   */
+  private async setupLogging(server: McpServer): Promise<void> {
+    // Handle log level setting
+    server.setRequestHandler(SetLevelRequestSchema, async (request) => {
+      this.logLevel = request.params.level;
+      await this.log(server, "info", `Log level set to ${this.logLevel}`);
+      return {};
+    });
+
+    await this.log(server, "info", "Creatify MCP Server initialized", {
+      capabilities: ["tools", "resources", "prompts", "logging"]
+    });
+  }
+
+  /**
+   * Set up MCP prompts (reusable templates)
+   */
+  private async setupPrompts(server: McpServer): Promise<void> {
+    const prompts = [
+      {
+        name: "create-product-demo",
+        description: "Create a professional product demonstration video",
+        arguments: [
+          {
+            name: "productName",
+            description: "Name of the product to demonstrate",
+            required: true
+          },
+          {
+            name: "keyFeatures",
+            description: "Key features to highlight (comma-separated)",
+            required: true
+          },
+          {
+            name: "targetAudience",
+            description: "Target audience for the demo",
+            required: false
+          },
+          {
+            name: "duration",
+            description: "Desired video duration in seconds",
+            required: false
+          }
+        ]
+      },
+      {
+        name: "create-social-content",
+        description: "Create engaging social media content",
+        arguments: [
+          {
+            name: "platform",
+            description: "Target platform (TikTok, Instagram, YouTube)",
+            required: true
+          },
+          {
+            name: "topic",
+            description: "Content topic or theme",
+            required: true
+          },
+          {
+            name: "tone",
+            description: "Content tone (energetic, professional, casual, funny)",
+            required: false
+          },
+          {
+            name: "callToAction",
+            description: "Call to action for viewers",
+            required: false
+          }
+        ]
+      },
+      {
+        name: "create-educational-video",
+        description: "Create an educational or tutorial video",
+        arguments: [
+          {
+            name: "subject",
+            description: "Subject or topic to teach",
+            required: true
+          },
+          {
+            name: "difficulty",
+            description: "Difficulty level (beginner, intermediate, advanced)",
+            required: true
+          },
+          {
+            name: "learningObjectives",
+            description: "What viewers should learn (comma-separated)",
+            required: true
+          },
+          {
+            name: "includeQuiz",
+            description: "Whether to include quiz questions",
+            required: false
+          }
+        ]
+      },
+      {
+        name: "create-marketing-campaign",
+        description: "Create a marketing campaign video",
+        arguments: [
+          {
+            name: "campaignGoal",
+            description: "Primary goal (awareness, conversion, engagement)",
+            required: true
+          },
+          {
+            name: "brandMessage",
+            description: "Core brand message to communicate",
+            required: true
+          },
+          {
+            name: "targetDemographic",
+            description: "Target demographic details",
+            required: true
+          },
+          {
+            name: "budget",
+            description: "Campaign budget tier (low, medium, high)",
+            required: false
+          }
+        ]
+      },
+      {
+        name: "analyze-video-performance",
+        description: "Analyze and optimize video performance",
+        arguments: [
+          {
+            name: "videoUrl",
+            description: "URL of the video to analyze",
+            required: true
+          },
+          {
+            name: "metrics",
+            description: "Metrics to focus on (views, engagement, conversion)",
+            required: false
+          },
+          {
+            name: "improvementAreas",
+            description: "Areas to improve (audio, visual, script, pacing)",
+            required: false
+          }
+        ]
+      }
+    ];
+
+    // List prompts
+    server.setRequestHandler(ListPromptsRequestSchema, async () => {
+      await this.log(server, "debug", "Listing available prompts", { count: prompts.length });
+      return { prompts };
+    });
+
+    // Get specific prompt
+    server.setRequestHandler(GetPromptRequestSchema, async (request) => {
+      const promptName = request.params.name;
+      const args = request.params.arguments || {};
+
+      await this.log(server, "debug", `Getting prompt: ${promptName}`, { arguments: args });
+
+      switch (promptName) {
+        case "create-product-demo":
+          return {
+            description: "Professional product demonstration video workflow",
+            messages: [
+              {
+                role: "user",
+                content: {
+                  type: "text",
+                  text: `Create a professional product demonstration video for "${args.productName || '[PRODUCT_NAME]'}" highlighting these key features: ${args.keyFeatures || '[KEY_FEATURES]'}.\n\nTarget audience: ${args.targetAudience || 'General consumers'}\nDesired duration: ${args.duration || '60-90'} seconds\n\nPlease:\n1. First, use the 'generate_ai_script' tool to create an engaging script\n2. Then use 'create_avatar_video' to bring it to life\n3. Consider the target audience and keep the tone professional yet engaging\n4. Include a clear call-to-action at the end`
+                }
+              }
+            ]
+          };
+
+        case "create-social-content":
+          const aspectRatio = args.platform === 'TikTok' || args.platform === 'Instagram' ? '9:16' : '16:9';
+          return {
+            description: "Engaging social media content creation workflow",
+            messages: [
+              {
+                role: "user",
+                content: {
+                  type: "text",
+                  text: `Create engaging ${args.platform || '[PLATFORM]'} content about "${args.topic || '[TOPIC]'}" with a ${args.tone || 'energetic'} tone.\n\nCall to action: ${args.callToAction || 'Like and follow for more!'}\n\nWorkflow:\n1. Use 'create_ai_shorts' for ${aspectRatio} short-form content\n2. Keep it under 60 seconds for maximum engagement\n3. Make the first 3 seconds attention-grabbing\n4. Include trending elements for the platform\n5. End with a clear call-to-action`
+                }
+              }
+            ]
+          };
+
+        case "create-educational-video":
+          return {
+            description: "Educational video creation workflow",
+            messages: [
+              {
+                role: "user",
+                content: {
+                  type: "text",
+                  text: `Create an educational video about "${args.subject || '[SUBJECT]'}" for ${args.difficulty || 'beginner'} level learners.\n\nLearning objectives: ${args.learningObjectives || '[LEARNING_OBJECTIVES]'}\nInclude quiz: ${args.includeQuiz || 'No'}\n\nEducational workflow:\n1. Generate a structured script with 'generate_ai_script'\n2. Break content into digestible segments\n3. Use 'create_avatar_video' with a professional, teaching tone\n4. Include examples and practical applications\n5. Summarize key points at the end\n${args.includeQuiz === 'Yes' ? '6. Add quiz questions for knowledge check' : ''}`
+                }
+              }
+            ]
+          };
+
+        case "create-marketing-campaign":
+          return {
+            description: "Marketing campaign video creation workflow",
+            messages: [
+              {
+                role: "user",
+                content: {
+                  type: "text",
+                  text: `Create a marketing campaign video with goal: ${args.campaignGoal || '[CAMPAIGN_GOAL]'}\n\nBrand message: "${args.brandMessage || '[BRAND_MESSAGE]'}"\nTarget demographic: ${args.targetDemographic || '[TARGET_DEMOGRAPHIC]'}\nBudget tier: ${args.budget || 'medium'}\n\nMarketing workflow:\n1. Use 'generate_ai_script' with persuasive, brand-aligned messaging\n2. Create compelling visuals with 'create_url_to_video' if you have a landing page\n3. Use 'create_avatar_video' for personal connection\n4. Focus on emotional appeal and clear value proposition\n5. Include strong call-to-action for ${args.campaignGoal}\n6. Optimize for the target demographic`
+                }
+              }
+            ]
+          };
+
+        case "analyze-video-performance":
+          return {
+            description: "Video performance analysis and optimization workflow",
+            messages: [
+              {
+                role: "user",
+                content: {
+                  type: "text",
+                  text: `Analyze and optimize this video: ${args.videoUrl || '[VIDEO_URL]'}\n\nFocus metrics: ${args.metrics || 'engagement, retention'}\nImprovement areas: ${args.improvementAreas || 'overall performance'}\n\nAnalysis workflow:\n1. Use 'create_ai_edited_video' to enhance the existing video\n2. Apply editing style based on performance goals\n3. Consider A/B testing different versions\n4. Focus on the specified improvement areas\n5. Generate recommendations for future content\n6. Create optimized version with better pacing and engagement`
+                }
+              }
+            ]
+          };
+
+        default:
+          throw new Error(`Prompt not found: ${promptName}`);
+      }
+    });
+
+    await this.log(server, "info", "Prompts initialized", { count: prompts.length });
   }
 
   /**
@@ -179,6 +463,13 @@ export class CreatifyMcpServer {
       },
       async ({ text, avatarId, aspectRatio, voiceId, name, greenScreen, noCaptions, noMusic, webhookUrl, waitForCompletion }) => {
         try {
+          await this.log(server, "info", "Creating avatar video", {
+            avatarId,
+            aspectRatio,
+            textLength: text.length,
+            waitForCompletion
+          });
+
           const params: any = {
             text,
             creator: avatarId,
@@ -194,9 +485,12 @@ export class CreatifyMcpServer {
 
           let result;
           if (waitForCompletion) {
+            await this.log(server, "info", "Waiting for avatar video completion...");
             result = await this.creatify.avatar.createAndWaitForLipsync(params);
+            await this.log(server, "info", "Avatar video completed", { videoId: result.id });
           } else {
             result = await this.creatify.avatar.createLipsync(params);
+            await this.log(server, "info", "Avatar video creation started", { videoId: result.id });
           }
 
           return {
@@ -206,6 +500,11 @@ export class CreatifyMcpServer {
             }]
           };
         } catch (error) {
+          await this.log(server, "error", "Avatar video creation failed", {
+            error: error instanceof Error ? error.message : String(error),
+            avatarId,
+            aspectRatio
+          });
           return {
             content: [{
               type: "text",

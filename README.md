@@ -11,6 +11,13 @@
 
 The **Creatify MCP Server** is a comprehensive Model Context Protocol (MCP) server that exposes the full power of Creatify AI's video generation platform to AI assistants, chatbots, and automation tools. Built on top of the robust [`@tsavo/creatify-api-ts`](https://www.npmjs.com/package/@tsavo/creatify-api-ts) TypeScript client library, this server transforms complex video creation workflows into simple, natural language interactions.
 
+### 🎨 **Advanced MCP Features:**
+- **📝 Prompts** - Reusable video creation templates and workflows
+- **📊 Logging** - Structured logging with multiple severity levels
+- **🔍 Progress Tracking** - Real-time updates during video generation
+- **🤖 AI Self-Help** - `how_to_use` tool for AI assistants to understand parameters
+- **📊 Notifications** - Real-time status updates and progress notifications
+
 ### 🎯 What This Enables
 
 Imagine telling Claude Desktop: *"Create a 16:9 avatar video of Anna saying 'Welcome to our product demo' and wait for it to complete"* - and having it actually happen. That's the power of this MCP server.
@@ -46,6 +53,13 @@ Imagine telling Claude Desktop: *"Create a 16:9 avatar video of Anna saying 'Wel
 - **`creatify://music`** - Available background music library
 - **`creatify://credits`** - Remaining API credits
 - **`creatify://avatar/{avatarId}`** - Detailed information about specific avatars
+
+### 📝 MCP Prompts (5 workflow templates)
+- **`create-product-demo`** - Professional product demonstration workflow
+- **`create-social-content`** - Engaging social media content creation
+- **`create-educational-video`** - Educational and tutorial video workflow
+- **`create-marketing-campaign`** - Marketing campaign video creation
+- **`analyze-video-performance`** - Video performance analysis and optimization
 
 ## Prerequisites
 
@@ -102,6 +116,63 @@ Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/
     }
   }
 }
+```
+
+### 🎨 **Advanced MCP Features**
+
+#### 📝 **Using Prompts (Workflow Templates)**
+
+AI assistants can now use predefined workflow templates for common video creation scenarios:
+
+**Example: Product Demo Workflow**
+```
+User: "Use the create-product-demo prompt for 'Amazing Widget' with features 'fast, reliable, easy to use' targeting small business owners"
+
+Claude: I'll use the product demo workflow template to create a professional demonstration video.
+
+[Claude automatically follows the complete workflow:
+1. Generates an engaging script using generate_ai_script
+2. Creates avatar video using create_avatar_video
+3. Optimizes for the target audience
+4. Includes clear call-to-action]
+```
+
+**Available Prompt Templates:**
+- `create-product-demo` - Professional product demonstrations
+- `create-social-content` - TikTok/Instagram/YouTube content
+- `create-educational-video` - Tutorials and educational content
+- `create-marketing-campaign` - Marketing and promotional videos
+- `analyze-video-performance` - Video optimization and analysis
+
+#### 📊 **Real-time Logging & Progress**
+
+The server provides structured logging with multiple severity levels:
+
+```
+[INFO] Creatify MCP Server initialized
+[INFO] Creating avatar video {avatarId: "anna_costume1_cameraA", aspectRatio: "16:9"}
+[INFO] Waiting for avatar video completion...
+[INFO] Avatar video completed {videoId: "video_abc123"}
+```
+
+**Log Levels:** `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency`
+
+#### 🤖 **AI Self-Help System**
+
+AI assistants can now understand tool parameters better using the `how_to_use` tool:
+
+```
+Claude: Let me check how to use the avatar video tool...
+
+[Calls how_to_use tool with toolName: "create_avatar_video"]
+
+[Gets comprehensive documentation with:
+- Required parameters with descriptions
+- Optional parameters with usage notes
+- Real code examples
+- Tips and best practices]
+
+Now I understand exactly how to create your avatar video!
 ```
 
 ### With Custom MCP Client
