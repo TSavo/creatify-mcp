@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "creatify": {
+      "command": "creatify-mcp",
+      "env": {
+        "CREATIFY_API_ID": "your-api-id-here",
+        "CREATIFY_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
