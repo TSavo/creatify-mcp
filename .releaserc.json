@@ -1,0 +1,19 @@
+{
+  "branches": ["main"],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    "@semantic-release/npm",
+    ["@semantic-release/github", {
+      "assets": [
+        {"path": "dist/index.js", "label": "Main JavaScript File"},
+        {"path": "dist/server.js", "label": "MCP Server File"},
+        {"path": "dist/types.js", "label": "Types File"}
+      ],
+      "successComment": "🎉 This release is now available on npm as ${nextRelease.name}",
+      "failComment": "❌ The release process failed. Please check the logs for more information.",
+      "failTitle": "Release Failed"
+    }]
+  ]
+}
