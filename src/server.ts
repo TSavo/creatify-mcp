@@ -22,7 +22,7 @@ export class CreatifyMcpServer {
   async setupServer(server: McpServer): Promise<void> {
     // Set up resources first
     await this.setupResources(server);
-    
+
     // Set up tools
     await this.setupTools(server);
   }
@@ -53,7 +53,7 @@ export class CreatifyMcpServer {
 
     // Voices resource
     server.resource(
-      "voices", 
+      "voices",
       "creatify://voices",
       async () => {
         try {
@@ -61,7 +61,7 @@ export class CreatifyMcpServer {
           return {
             contents: [{
               uri: "creatify://voices",
-              mimeType: "application/json", 
+              mimeType: "application/json",
               text: JSON.stringify(voices, null, 2)
             }]
           };
@@ -74,10 +74,10 @@ export class CreatifyMcpServer {
     // Custom templates resource
     server.resource(
       "templates",
-      "creatify://templates", 
+      "creatify://templates",
       async () => {
         try {
-          const templates = await this.creatify.customTemplates.getCustomTemplates();
+          const templates = await this.creatify.customTemplates.getCustomTemplateList();
           return {
             contents: [{
               uri: "creatify://templates",
@@ -100,7 +100,7 @@ export class CreatifyMcpServer {
           const credits = await this.creatify.workspace.getRemainingCredits();
           return {
             contents: [{
-              uri: "creatify://credits", 
+              uri: "creatify://credits",
               mimeType: "application/json",
               text: JSON.stringify(credits, null, 2)
             }]
@@ -117,7 +117,13 @@ export class CreatifyMcpServer {
       new ResourceTemplate("creatify://avatar/{avatarId}", { list: undefined }),
       async (uri, { avatarId }) => {
         try {
-          const avatar = await this.creatify.avatar.getAvatar(avatarId);
+          // Note: Individual avatar details not available in current API
+          // Return basic info that avatar exists
+          const avatars = await this.creatify.avatar.getAvatars();
+          const avatar = avatars.find(a => a.avatar_id === avatarId);
+          if (!avatar) {
+            throw new Error(`Avatar ${avatarId} not found`);
+          }
           return {
             contents: [{
               uri: uri.href,
@@ -182,7 +188,7 @@ export class CreatifyMcpServer {
         } catch (error) {
           return {
             content: [{
-              type: "text", 
+              type: "text",
               text: `Error creating avatar video: ${error instanceof Error ? error.message : String(error)}`
             }],
             isError: true
@@ -226,10 +232,17 @@ export class CreatifyMcpServer {
           if (webhookUrl) videoParams.webhook_url = webhookUrl;
 
           let result;
+          result = await this.creatify.urlToVideo.createVideoFromLink(videoParams);
+
           if (waitForCompletion) {
-            result = await this.creatify.urlToVideo.createAndWaitForVideoFromLink(videoParams);
-          } else {
-            result = await this.creatify.urlToVideo.createVideoFromLink(videoParams);
+            // Poll for completion
+            let attempts = 0;
+            const maxAttempts = 120; // 10 minutes
+            while (attempts < maxAttempts && result.status !== 'done' && result.status !== 'error') {
+              await new Promise(resolve => setTimeout(resolve, 5000));
+              result = await this.creatify.urlToVideo.getVideo(result.id);
+              attempts++;
+            }
           }
 
           return {
@@ -346,10 +359,17 @@ export class CreatifyMcpServer {
           if (webhookUrl) params.webhook_url = webhookUrl;
 
           let result;
+          result = await this.creatify.avatar.createMultiAvatarLipsync(params);
+
           if (waitForCompletion) {
-            result = await this.creatify.avatar.createAndWaitForMultiAvatarLipsync(params);
-          } else {
-            result = await this.creatify.avatar.createMultiAvatarLipsync(params);
+            // Poll for completion
+            let attempts = 0;
+            const maxAttempts = 120; // 10 minutes
+            while (attempts < maxAttempts && result.status !== 'done' && result.status !== 'error') {
+              await new Promise(resolve => setTimeout(resolve, 5000));
+              result = await this.creatify.avatar.getLipsync(result.id);
+              attempts++;
+            }
           }
 
           return {
@@ -380,13 +400,13 @@ export class CreatifyMcpServer {
       async ({ videoId, videoType }) => {
         try {
           let result;
-          
+
           switch (videoType) {
             case "lipsync":
               result = await this.creatify.avatar.getLipsync(videoId);
               break;
             case "url-to-video":
-              result = await this.creatify.urlToVideo.getVideoFromLink(videoId);
+              result = await this.creatify.urlToVideo.getVideo(videoId);
               break;
             case "text-to-speech":
               result = await this.creatify.textToSpeech.getTextToSpeech(videoId);
@@ -398,7 +418,7 @@ export class CreatifyMcpServer {
               result = await this.creatify.aiEditing.getAiEditing(videoId);
               break;
             case "custom-template":
-              result = await this.creatify.customTemplates.getCustomTemplateVideo(videoId);
+              result = await this.creatify.customTemplates.getCustomTemplate(videoId);
               break;
             default:
               throw new Error(`Unknown video type: ${videoType}`);
@@ -444,9 +464,9 @@ export class CreatifyMcpServer {
 
           let result;
           if (waitForCompletion) {
-            result = await this.creatify.customTemplates.createAndWaitForCustomTemplateVideo(params);
+            result = await this.creatify.customTemplates.createAndWaitForCustomTemplate(params);
           } else {
-            result = await this.creatify.customTemplates.createCustomTemplateVideo(params);
+            result = await this.creatify.customTemplates.createCustomTemplate(params);
           }
 
           return {
