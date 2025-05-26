@@ -1,10 +1,26 @@
-# Creatify MCP Server
+# 🎬 Creatify MCP Server
 
-An MCP (Model Context Protocol) server that exposes [Creatify AI](https://creatify.ai) capabilities as tools and resources for AI assistants and agents.
+[![npm version](https://badge.fury.io/js/@tsavo/creatify-mcp.svg)](https://badge.fury.io/js/@tsavo/creatify-mcp)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![MCP](https://img.shields.io/badge/MCP-Compatible-blue)](https://modelcontextprotocol.io/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Overview
+> **The ultimate MCP server for AI video generation** - Bringing [Creatify AI](https://creatify.ai)'s powerful video creation capabilities to every AI assistant in the MCP ecosystem.
 
-This MCP server allows AI assistants like Claude Desktop, custom chatbots, and other MCP clients to create AI-generated videos using Creatify's powerful API. It wraps the [`@tsavo/creatify-api-ts`](https://www.npmjs.com/package/@tsavo/creatify-api-ts) client library and exposes its capabilities through the standardized MCP protocol.
+## 🌟 Overview
+
+The **Creatify MCP Server** is a comprehensive Model Context Protocol (MCP) server that exposes the full power of Creatify AI's video generation platform to AI assistants, chatbots, and automation tools. Built on top of the robust [`@tsavo/creatify-api-ts`](https://www.npmjs.com/package/@tsavo/creatify-api-ts) TypeScript client library, this server transforms complex video creation workflows into simple, natural language interactions.
+
+### 🎯 What This Enables
+
+Imagine telling Claude Desktop: *"Create a 16:9 avatar video of Anna saying 'Welcome to our product demo' and wait for it to complete"* - and having it actually happen. That's the power of this MCP server.
+
+### 🏗️ Built With
+
+- **[Creatify AI API](https://creatify.ai/api)** - The world's leading AI video generation platform
+- **[@tsavo/creatify-api-ts](https://www.npmjs.com/package/@tsavo/creatify-api-ts)** - Comprehensive TypeScript client library
+- **[Model Context Protocol](https://modelcontextprotocol.io/)** - Standardized AI assistant integration
+- **TypeScript** - Full type safety and excellent developer experience
 
 ## Features
 
@@ -230,8 +246,218 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - [Model Context Protocol](https://modelcontextprotocol.io/) - Protocol specification
 - [Creatify AI](https://creatify.ai/) - AI video generation platform
 
-## Support
+## 📚 Comprehensive Documentation
 
-- 📖 [Creatify API Documentation](https://creatify.ai/api)
-- 🐛 [Report Issues](https://github.com/TSavo/creatify-mcp/issues)
-- 💬 [MCP Community](https://github.com/modelcontextprotocol/specification/discussions)
+### 🎬 Video Tutorials
+
+*Coming soon - comprehensive video tutorials showing real-world usage scenarios*
+
+### 📖 API Reference
+
+For detailed API documentation, see:
+- **[Creatify API Documentation](https://creatify.ai/api)** - Official Creatify API docs
+- **[@tsavo/creatify-api-ts Documentation](https://github.com/TSavo/creatify-api-ts#readme)** - TypeScript client library docs
+- **[Model Context Protocol Specification](https://modelcontextprotocol.io/specification)** - MCP protocol details
+
+### 🔧 Advanced Configuration
+
+#### Environment Variables
+
+| Variable | Required | Description | Example |
+|----------|----------|-------------|----------|
+| `CREATIFY_API_ID` | ✅ | Your Creatify API ID | `your-api-id-here` |
+| `CREATIFY_API_KEY` | ✅ | Your Creatify API Key | `your-api-key-here` |
+| `MCP_LOG_LEVEL` | ❌ | Logging level | `debug`, `info`, `warn`, `error` |
+
+#### Claude Desktop Advanced Configuration
+
+```json
+{
+  "mcpServers": {
+    "creatify": {
+      "command": "creatify-mcp",
+      "env": {
+        "CREATIFY_API_ID": "your-api-id",
+        "CREATIFY_API_KEY": "your-api-key",
+        "MCP_LOG_LEVEL": "info"
+      },
+      "args": ["--verbose"]
+    }
+  }
+}
+```
+
+### 🚀 Performance Optimization
+
+#### Batch Operations
+
+For multiple video creations, consider using the batch processing capabilities:
+
+```typescript
+// Example: Create multiple videos efficiently
+const videos = await Promise.all([
+  client.callTool({
+    name: "create_avatar_video",
+    arguments: { text: "Video 1", avatarId: "anna", aspectRatio: "16:9" }
+  }),
+  client.callTool({
+    name: "create_avatar_video",
+    arguments: { text: "Video 2", avatarId: "john", aspectRatio: "16:9" }
+  })
+]);
+```
+
+#### Caching Strategies
+
+- **Avatar/Voice Lists**: Cache for 1 hour (they rarely change)
+- **Video Status**: Poll every 5-10 seconds for active tasks
+- **Templates**: Cache for 24 hours
+
+### 🔐 Security Best Practices
+
+1. **Never commit API keys** to version control
+2. **Use environment variables** for all sensitive data
+3. **Rotate API keys** regularly
+4. **Monitor API usage** to detect unauthorized access
+5. **Use HTTPS** for all webhook URLs
+
+### 🐛 Troubleshooting
+
+#### Common Issues
+
+**"API credentials not found"**
+```bash
+# Solution: Set environment variables
+export CREATIFY_API_ID="your-api-id"
+export CREATIFY_API_KEY="your-api-key"
+```
+
+**"Video creation failed"**
+- Check your Creatify account credits
+- Verify avatar/voice IDs exist
+- Ensure text is not empty
+- Check aspect ratio is valid
+
+**"MCP connection failed"**
+- Verify the server is running
+- Check Claude Desktop configuration
+- Ensure Node.js version >= 18
+
+#### Debug Mode
+
+```bash
+# Run with debug logging
+MCP_LOG_LEVEL=debug creatify-mcp
+```
+
+### 📊 Monitoring & Analytics
+
+#### Usage Tracking
+
+Monitor your Creatify API usage:
+
+```typescript
+// Check remaining credits
+const credits = await client.readResource({ uri: "creatify://credits" });
+console.log(`Remaining credits: ${JSON.parse(credits.contents[0].text).remaining_credits}`);
+```
+
+#### Performance Metrics
+
+- **Video Creation Time**: Typically 2-5 minutes
+- **API Response Time**: Usually < 2 seconds
+- **Success Rate**: Monitor failed requests
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how to get started:
+
+### 🛠️ Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/TSavo/creatify-mcp.git
+cd creatify-mcp
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your API credentials
+
+# Run tests
+npm test
+
+# Build the project
+npm run build
+
+# Run in development mode
+npm run dev
+```
+
+### 🧪 Testing
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run type checking
+npm run type-check
+
+# Run linting
+npm run lint
+```
+
+### 📝 Code Style
+
+We use:
+- **ESLint** for code linting
+- **Prettier** for code formatting
+- **TypeScript** for type safety
+- **Conventional Commits** for commit messages
+
+### 🔄 Pull Request Process
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Add tests for new functionality
+5. Ensure all tests pass (`npm test`)
+6. Run linting (`npm run lint:fix`)
+7. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+8. Push to the branch (`git push origin feature/amazing-feature`)
+9. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **[Creatify AI](https://creatify.ai)** - For providing the amazing AI video generation platform
+- **[@tsavo/creatify-api-ts](https://www.npmjs.com/package/@tsavo/creatify-api-ts)** - The robust TypeScript client library that powers this server
+- **[Anthropic](https://www.anthropic.com)** - For Claude and the Model Context Protocol
+- **[MCP Community](https://github.com/modelcontextprotocol)** - For the standardized protocol that makes this integration possible
+
+## 📞 Support
+
+- 📖 **[Creatify API Documentation](https://creatify.ai/api)** - Official API docs
+- 🐛 **[Report Issues](https://github.com/TSavo/creatify-mcp/issues)** - Bug reports and feature requests
+- 💬 **[MCP Community](https://github.com/modelcontextprotocol/specification/discussions)** - Community discussions
+- 📧 **[Contact Author](mailto:listentomy@nefariousplan.com)** - Direct support
+
+---
+
+<div align="center">
+
+**Created with ❤️ by [T Savo](mailto:listentomy@nefariousplan.com)**
+
+🌐 **[Horizon City](https://www.horizon-city.com)** - *Building the future of AI-powered creativity*
+
+*Making AI video generation accessible to every developer and AI assistant*
+
+</div>
