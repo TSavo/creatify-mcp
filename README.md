@@ -61,6 +61,34 @@ Imagine telling Claude Desktop: *"Create a 16:9 avatar video of Anna saying 'Wel
 - **`creatify://credits`** - Remaining API credits
 - **`creatify://avatar/{avatarId}`** - Detailed information about specific avatars
 
+## 🏆 **Why Choose Creatify MCP Server?**
+
+### 🚀 **Complete API Coverage**
+- ✅ **12 MCP Tools** covering 100% of Creatify API functionality
+- ✅ **6 MCP Resources** for comprehensive data access
+- ✅ **5 Workflow Prompts** for common video creation scenarios
+- ✅ **Enterprise-grade logging** with 8 severity levels
+
+### 🤖 **AI-First Design**
+- ✅ **Self-documenting** with `how_to_use` tool for AI assistants
+- ✅ **Intelligent parameter validation** and error handling
+- ✅ **Real-time progress updates** during video generation
+- ✅ **Semantic versioning** with automated releases
+
+### 🎨 **Advanced Features**
+- ✅ **Emotion & gesture control** in advanced lip-sync
+- ✅ **Custom avatar creation** (DYOA - Design Your Own Avatar)
+- ✅ **AI-powered script generation** for any video type
+- ✅ **Short-form video optimization** for TikTok/Instagram/YouTube
+- ✅ **Background music management** and integration
+
+### 💼 **Production Ready**
+- ✅ **TypeScript** for type safety and better IDE support
+- ✅ **Comprehensive error handling** with detailed context
+- ✅ **Professional logging** for monitoring and debugging
+- ✅ **Automated testing** and continuous integration
+- ✅ **Semantic versioning** for reliable updates
+
 ### 📝 MCP Prompts (5 workflow templates)
 - **`create-product-demo`** - Professional product demonstration workflow
 - **`create-social-content`** - Engaging social media content creation
@@ -88,6 +116,67 @@ cd creatify-mcp
 npm install
 npm run build
 npm link
+```
+
+## 🎬 **Live Demo Examples**
+
+### **Create an AI Avatar Video**
+```
+User: "Create a professional avatar video with Anna saying 'Welcome to our company!' in 16:9 format"
+
+Claude: I'll create a professional avatar video for you using the Creatify MCP Server.
+
+[Uses create_avatar_video tool with:
+- text: "Welcome to our company!"
+- avatarId: "anna_costume1_cameraA"
+- aspectRatio: "16:9"
+- voiceId: "en-US-AriaNeural"]
+
+Your professional avatar video has been created! Anna delivers your message with natural lip-sync and professional presentation.
+```
+
+### **Generate TikTok-Style Short Video**
+```
+User: "Make a 30-second TikTok video about coffee brewing tips"
+
+Claude: I'll create an engaging short-form video perfect for TikTok!
+
+[Uses create_ai_shorts tool with:
+- prompt: "Quick coffee brewing tips with energetic presentation"
+- aspectRatio: "9:16"
+- duration: 30
+- style: "energetic"]
+
+Your TikTok-ready short video is being generated with optimal 9:16 aspect ratio and engaging content!
+```
+
+### **Convert Website to Video**
+```
+User: "Turn my product landing page into a marketing video"
+
+Claude: I'll convert your website into a compelling marketing video.
+
+[Uses create_url_to_video tool with:
+- url: "https://yourproduct.com"
+- aspectRatio: "16:9"
+- style: "marketing"]
+
+Your landing page has been transformed into a professional marketing video showcasing your product!
+```
+
+### **AI-Powered Script Generation**
+```
+User: "Generate a script for a 60-second product demo video"
+
+Claude: I'll create a compelling script for your product demo.
+
+[Uses generate_ai_script tool with:
+- topic: "Product demonstration video"
+- scriptType: "commercial"
+- duration: 60
+- tone: "professional"]
+
+Your script is ready! It includes engaging hooks, clear value propositions, and a strong call-to-action optimized for 60-second format.
 ```
 
 ## Configuration
