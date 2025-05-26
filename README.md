@@ -1,9 +1,16 @@
 # 🎬 Creatify MCP Server
 
-[![npm version](https://badge.fury.io/js/@tsavo/creatify-mcp.svg)](https://badge.fury.io/js/@tsavo/creatify-mcp)
+[![npm version](https://badge.fury.io/js/%40tsavo%2Fcreatify-mcp.svg)](https://www.npmjs.com/package/@tsavo/creatify-mcp)
+[![npm downloads](https://img.shields.io/npm/dm/@tsavo/creatify-mcp.svg)](https://www.npmjs.com/package/@tsavo/creatify-mcp)
+[![CI](https://github.com/TSavo/creatify-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/TSavo/creatify-mcp/actions/workflows/ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-green?logo=node.js)](https://nodejs.org/)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-blue)](https://modelcontextprotocol.io/)
+[![Creatify AI](https://img.shields.io/badge/Creatify-AI%20Video%20Generation-purple)](https://creatify.ai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/TSavo/creatify-mcp?style=social)](https://github.com/TSavo/creatify-mcp)
+[![GitHub issues](https://img.shields.io/github/issues/TSavo/creatify-mcp)](https://github.com/TSavo/creatify-mcp/issues)
+[![Semantic Release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 > **The ultimate MCP server for AI video generation** - Bringing [Creatify AI](https://creatify.ai)'s powerful video creation capabilities to every AI assistant in the MCP ecosystem.
 
