@@ -47,6 +47,9 @@
     "url": "https://github.com/TSavo/creatify-mcp/issues"
   },
   "homepage": "https://github.com/TSavo/creatify-mcp#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
