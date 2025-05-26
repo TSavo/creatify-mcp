@@ -24,19 +24,26 @@ Imagine telling Claude Desktop: *"Create a 16:9 avatar video of Anna saying 'Wel
 
 ## Features
 
-### 🛠️ MCP Tools (Actions)
+### 🛠️ MCP Tools (12 powerful actions)
 - **`create_avatar_video`** - Create AI avatar videos with lip-sync
 - **`create_url_to_video`** - Convert websites into professional videos
 - **`generate_text_to_speech`** - Generate natural-sounding speech from text
 - **`create_multi_avatar_conversation`** - Create videos with multiple avatars having conversations
 - **`create_custom_template_video`** - Generate videos using custom templates
 - **`create_ai_edited_video`** - Automatically edit and enhance videos
+- **`create_ai_shorts`** - Create short-form videos (perfect for TikTok, Instagram Reels)
+- **`generate_ai_script`** - Generate AI-powered scripts for videos
+- **`create_custom_avatar`** - Design and create your own custom avatars (DYOA)
+- **`manage_music`** - Upload, manage, and use background music
+- **`create_advanced_lipsync`** - Advanced lip-sync with emotion and gesture control
+- **`how_to_use`** - Get detailed usage information for any tool
 - **`get_video_status`** - Check the status of video generation tasks
 
-### 📚 MCP Resources (Read-only data)
+### 📚 MCP Resources (6 data sources)
 - **`creatify://avatars`** - List of available AI avatars
 - **`creatify://voices`** - List of available voices for text-to-speech
 - **`creatify://templates`** - Available custom video templates
+- **`creatify://music`** - Available background music library
 - **`creatify://credits`** - Remaining API credits
 - **`creatify://avatar/{avatarId}`** - Detailed information about specific avatars
 
