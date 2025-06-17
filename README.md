@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/tsavo-creatify-mcp-badge.png)](https://mseep.ai/app/tsavo-creatify-mcp)
+
 # 🎬 Creatify MCP Server
 
 [![npm version](https://badge.fury.io/js/%40tsavo%2Fcreatify-mcp.svg)](https://www.npmjs.com/package/@tsavo/creatify-mcp)
